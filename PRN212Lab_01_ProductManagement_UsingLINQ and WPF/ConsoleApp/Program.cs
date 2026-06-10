@@ -49,7 +49,7 @@ void ShowAllCategories()
     Console.WriteLine("List Of Categories:");
     foreach (var c in categories)
     {
-        Console.WriteLine($"{c.CategoryID}\t{c.CategoryName}");
+        Console.WriteLine($"{c.CategoryId}\t{c.CategoryName}");
     }
 }
 
@@ -72,7 +72,7 @@ void ShowCategoryWithMostProducts()
         return;
     }
     Console.WriteLine("Category with most products:");
-    Console.WriteLine($"{cat.CategoryID}\t{cat.CategoryName}\tProducts: {cat.Products?.Count ?? 0}");
+    Console.WriteLine($"{cat.CategoryId}\t{cat.CategoryName}\tProducts: {cat.Products?.Count ?? 0}");
 }
 
 void ShowTop3Categories()
@@ -82,7 +82,7 @@ void ShowTop3Categories()
     int rank = 1;
     foreach (var c in top3)
     {
-        Console.WriteLine($"{rank}. {c.CategoryID}\t{c.CategoryName}\tProducts: {c.Products?.Count ?? 0}");
+        Console.WriteLine($"{rank}. {c.CategoryId}\t{c.CategoryName}\tProducts: {c.Products?.Count ?? 0}");
         rank++;
     }
 }

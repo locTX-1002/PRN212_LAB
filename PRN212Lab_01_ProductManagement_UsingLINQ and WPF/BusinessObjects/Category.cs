@@ -10,13 +10,13 @@ namespace BusinessObjects
         {
             Products = new List<Product>();
         }
-        public Category(int CategoryID,string CategoryName)
+        public Category(int CategoryId,string CategoryName)
         {
-            this.CategoryID = CategoryID;
+            this.CategoryId = CategoryId;
             this.CategoryName = CategoryName;
             Products = new List<Product>();
         }
-        public int CategoryID { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; } = string.Empty;
         public List<Product> Products { get; set; }
     }

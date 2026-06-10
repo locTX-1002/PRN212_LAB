@@ -57,9 +57,9 @@ namespace DataAccessLayer
             if (!db.Categories.Any())
             {
                 db.Categories.AddRange(
-                    new Category { CategoryID = 1, CategoryName = "Beverages" },
-                    new Category { CategoryID = 2, CategoryName = "Condiments" },
-                    new Category { CategoryID = 3, CategoryName = "Confections" }
+                    new Category { CategoryId = 1, CategoryName = "Beverages" },
+                    new Category { CategoryId = 2, CategoryName = "Condiments" },
+                    new Category { CategoryId = 3, CategoryName = "Confections" }
                 );
                 db.SaveChanges();
             }

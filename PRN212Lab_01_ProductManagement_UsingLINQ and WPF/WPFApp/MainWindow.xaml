@@ -118,7 +118,7 @@
 
                     <TextBlock Text="CATEGORY" Style="{StaticResource HeaderLabel}" Margin="6,16,0,8"/>
                     <ComboBox x:Name="cboFilterCategory" SelectionChanged="cboFilterCategory_SelectionChanged"
-                              SelectedValuePath="CategoryID" Margin="0,0,0,4">
+                              SelectedValuePath="CategoryId" Margin="0,0,0,4">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <Border Padding="4,2" CornerRadius="3">
@@ -349,7 +349,7 @@
 
                             <TextBlock Text="CATEGORY" Style="{StaticResource HeaderLabel}" Margin="0,0,0,4"/>
                             <ComboBox x:Name="cboCategory" Margin="0,0,0,8"
-                                      DisplayMemberPath="CategoryName" SelectedValuePath="CategoryID"/>
+                                      DisplayMemberPath="CategoryName" SelectedValuePath="CategoryId"/>
 
                             <Border x:Name="formError" Background="{StaticResource DangerSubtle}" CornerRadius="6"
                                     BorderBrush="{StaticResource DangerFg}" BorderThickness="1"
