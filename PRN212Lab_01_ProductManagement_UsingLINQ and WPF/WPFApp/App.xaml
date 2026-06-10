@@ -1,0 +1,332 @@
+<Application x:Class="WPFApp.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:WPFApp"
+             StartupUri="LoginWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <!-- GitHub Dark Pro inspired palette -->
+            <SolidColorBrush x:Key="BgCanvas"     Color="#0D1117"/>
+            <SolidColorBrush x:Key="BgOverlay"    Color="#161B22"/>
+            <SolidColorBrush x:Key="BgSubtle"     Color="#1C2128"/>
+            <SolidColorBrush x:Key="BgHover"      Color="#21262D"/>
+            <SolidColorBrush x:Key="BorderMuted"  Color="#21262D"/>
+            <SolidColorBrush x:Key="BorderDefault" Color="#30363D"/>
+            <SolidColorBrush x:Key="BorderStrong" Color="#484F58"/>
+            <SolidColorBrush x:Key="TextPrimary"  Color="#E6EDF3"/>
+            <SolidColorBrush x:Key="TextSecondary" Color="#8B949E"/>
+            <SolidColorBrush x:Key="TextTertiary" Color="#6E7681"/>
+            <SolidColorBrush x:Key="AccentFg"     Color="#58A6FF"/>
+            <SolidColorBrush x:Key="AccentEmphasis" Color="#1F6FEB"/>
+            <SolidColorBrush x:Key="AccentSubtle" Color="#1F2937"/>
+            <SolidColorBrush x:Key="SuccessFg"    Color="#3FB950"/>
+            <SolidColorBrush x:Key="SuccessEmphasis" Color="#238636"/>
+            <SolidColorBrush x:Key="DangerFg"     Color="#F85149"/>
+            <SolidColorBrush x:Key="DangerEmphasis" Color="#DA3633"/>
+            <SolidColorBrush x:Key="DangerSubtle" Color="#3B1518"/>
+            <SolidColorBrush x:Key="AttentionFg"  Color="#D29922"/>
+
+            <!-- Default Window -->
+            <Style TargetType="Window">
+                <Setter Property="Background" Value="{StaticResource BgCanvas}"/>
+                <Setter Property="FontFamily" Value="Segoe UI Variable Text, Segoe UI, Inter"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="TextOptions.TextFormattingMode" Value="Ideal"/>
+                <Setter Property="TextOptions.TextRenderingMode" Value="ClearType"/>
+            </Style>
+
+            <!-- Typography -->
+            <Style x:Key="H1" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            </Style>
+
+            <Style x:Key="H2" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            </Style>
+
+            <Style x:Key="Subtle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+            </Style>
+
+            <Style x:Key="Mono" TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="Cascadia Mono, JetBrains Mono, Consolas"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            </Style>
+
+            <Style x:Key="MonoSubtle" TargetType="TextBlock" BasedOn="{StaticResource Mono}">
+                <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                <Setter Property="FontSize" Value="11"/>
+            </Style>
+
+            <Style x:Key="Label" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="11"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                <Setter Property="TextOptions.TextRenderingMode" Value="Auto"/>
+            </Style>
+
+            <Style x:Key="HeaderLabel" TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="Cascadia Mono, JetBrains Mono, Consolas"/>
+                <Setter Property="FontSize" Value="10"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Foreground" Value="{StaticResource TextTertiary}"/>
+            </Style>
+
+            <!-- Kbd chip (for keyboard hints) -->
+            <Style x:Key="Kbd" TargetType="Border">
+                <Setter Property="CornerRadius" Value="3"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Background" Value="{StaticResource BgSubtle}"/>
+                <Setter Property="Padding" Value="5,1"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+
+            <!-- Inputs -->
+            <Style TargetType="TextBox">
+                <Setter Property="Padding" Value="10,7"/>
+                <Setter Property="Background" Value="{StaticResource BgCanvas}"/>
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="MinHeight" Value="32"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="CaretBrush" Value="{StaticResource AccentFg}"/>
+                <Setter Property="SelectionBrush" Value="{StaticResource AccentEmphasis}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TextBox">
+                            <Border x:Name="bd"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="6">
+                                <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                    <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource AccentFg}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Foreground" Value="{StaticResource TextTertiary}"/>
+                                    <Setter TargetName="bd" Property="Background" Value="{StaticResource BgOverlay}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="PasswordBox">
+                <Setter Property="Padding" Value="10,7"/>
+                <Setter Property="Background" Value="{StaticResource BgCanvas}"/>
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="MinHeight" Value="32"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="CaretBrush" Value="{StaticResource AccentFg}"/>
+            </Style>
+
+            <Style TargetType="ComboBox">
+                <Setter Property="Padding" Value="10,5"/>
+                <Setter Property="MinHeight" Value="32"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Background" Value="{StaticResource BgCanvas}"/>
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
+            </Style>
+
+            <Style TargetType="CheckBox">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="FontSize" Value="12"/>
+            </Style>
+
+            <!-- Buttons (flat, technical) -->
+            <Style x:Key="BaseButton" TargetType="Button">
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Padding" Value="14,7"/>
+                <Setter Property="MinHeight" Value="32"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="bd"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="6"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="bd" Property="Opacity" Value="0.4"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Primary: filled accent -->
+            <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
+                <Setter Property="Background" Value="{StaticResource SuccessEmphasis}"/>
+                <Setter Property="BorderBrush" Value="#2EA043"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#2EA043"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Secondary: outline -->
+            <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
+                <Setter Property="Background" Value="{StaticResource BgSubtle}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource BgHover}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource BorderStrong}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Danger: outline red -->
+            <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
+                <Setter Property="Background" Value="{StaticResource BgSubtle}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
+                <Setter Property="Foreground" Value="{StaticResource DangerFg}"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource DangerEmphasis}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource DangerEmphasis}"/>
+                        <Setter Property="Foreground" Value="White"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Ghost: minimal -->
+            <Style x:Key="GhostButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource BgHover}"/>
+                        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Card: 1px border, no shadow -->
+            <Style x:Key="Card" TargetType="Border">
+                <Setter Property="Background" Value="{StaticResource BgOverlay}"/>
+                <Setter Property="CornerRadius" Value="8"/>
+                <Setter Property="Padding" Value="20"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style>
+
+            <!-- DataGrid -->
+            <Style TargetType="DataGrid">
+                <Setter Property="AutoGenerateColumns" Value="False"/>
+                <Setter Property="Background" Value="{StaticResource BgOverlay}"/>
+                <Setter Property="AlternatingRowBackground" Value="{StaticResource BgOverlay}"/>
+                <Setter Property="RowBackground" Value="{StaticResource BgOverlay}"/>
+                <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderMuted}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource BorderMuted}"/>
+                <Setter Property="VerticalGridLinesBrush" Value="{StaticResource BorderMuted}"/>
+                <Setter Property="HeadersVisibility" Value="Column"/>
+                <Setter Property="ColumnHeaderHeight" Value="36"/>
+                <Setter Property="RowHeight" Value="38"/>
+                <Setter Property="CanUserAddRows" Value="False"/>
+                <Setter Property="CanUserDeleteRows" Value="False"/>
+                <Setter Property="IsReadOnly" Value="True"/>
+                <Setter Property="SelectionMode" Value="Single"/>
+                <Setter Property="SelectionUnit" Value="FullRow"/>
+                <Setter Property="CanUserSortColumns" Value="True"/>
+                <Setter Property="CanUserResizeRows" Value="False"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            </Style>
+
+            <Style TargetType="DataGridColumnHeader">
+                <Setter Property="Background" Value="{StaticResource BgSubtle}"/>
+                <Setter Property="Foreground" Value="{StaticResource TextTertiary}"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="FontSize" Value="10"/>
+                <Setter Property="FontFamily" Value="Cascadia Mono, JetBrains Mono, Consolas"/>
+                <Setter Property="Padding" Value="14,10"/>
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderMuted}"/>
+                <Setter Property="BorderThickness" Value="0,0,1,1"/>
+            </Style>
+
+            <Style TargetType="DataGridCell">
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="14,6"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="DataGridCell">
+                            <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                <ContentPresenter VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="{StaticResource AccentSubtle}"/>
+                        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style TargetType="DataGridRow">
+                <Setter Property="Background" Value="{StaticResource BgOverlay}"/>
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="{StaticResource AccentSubtle}"/>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource BgHover}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Status badge -->
+            <Style x:Key="Badge" TargetType="Border">
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="Padding" Value="8,2"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+            </Style>
+
+            <!-- Status dot -->
+            <Style x:Key="StatusDot" TargetType="Ellipse">
+                <Setter Property="Width" Value="6"/>
+                <Setter Property="Height" Value="6"/>
+            </Style>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
