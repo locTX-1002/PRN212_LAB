@@ -16,5 +16,7 @@ namespace Services
         }
 
         public List<Category> GetCategories() => categoryRepository.GetCategories();
+        public Category? GetCategoryWithMostProducts() => categoryRepository.GetCategoryWithMostProducts();
+        public List<Category> GetTopCategoriesByProductCount(int top) => categoryRepository.GetTopCategoriesByProductCount(top);
     }
 }

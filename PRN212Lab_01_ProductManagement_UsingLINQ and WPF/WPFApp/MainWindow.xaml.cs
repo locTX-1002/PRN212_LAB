@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using WPFApp.Dialogs;
 using WPFApp.Mvvm;
+using System.Windows.Media;
 
 namespace WPFApp
 {
@@ -16,9 +17,13 @@ namespace WPFApp
     {
         private readonly IProductService iProductService;
         private readonly IAccountService iAccountService;
+        private readonly ICategoryService iCategoryService;
         private readonly AccountMember? currentUser;
         private readonly MainViewModel vm;
         private readonly DispatcherTimer clock;
+        private Brush? searchDefaultBg;
+        private Brush? comboDefaultBg;
+        private Brush? checkDefaultBg;
 
         public MainWindow() : this(null) { }
 
@@ -27,9 +32,10 @@ namespace WPFApp
             InitializeComponent();
             iProductService = new ProductService();
             iAccountService = new AccountService();
+            iCategoryService = new CategoryService();
             currentUser = user;
 
-            vm = new MainViewModel(iProductService, new CategoryService());
+            vm = new MainViewModel(iProductService, iCategoryService);
             DataContext = vm;
 
             clock = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
@@ -55,6 +61,13 @@ namespace WPFApp
             await ReloadAsync();
             cboCategory.ItemsSource = vm.Categories;
             cboFilterCategory.ItemsSource = vm.Categories;
+
+            // store original backgrounds so we can restore later
+            searchDefaultBg = txtSearch.Background;
+            comboDefaultBg = cboFilterCategory.Background;
+            checkDefaultBg = chkInStockOnly.Background;
+
+            UpdateFilterColors();
         }
 
         private async Task ReloadAsync()
@@ -65,6 +78,7 @@ namespace WPFApp
                 await vm.ReloadAsync();
                 UpdateStatus();
                 UpdateEmptyState();
+                UpdateFilterColors();
             }
             finally { loadingOverlay.Visibility = Visibility.Collapsed; }
         }
@@ -202,6 +216,7 @@ namespace WPFApp
             vm.InStockOnly = chkInStockOnly.IsChecked == true;
             UpdateStatus();
             UpdateEmptyState();
+            UpdateFilterColors();
         }
 
         private void cboFilterCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -209,6 +224,7 @@ namespace WPFApp
             vm.CategoryFilter = cboFilterCategory.SelectedValue as int?;
             UpdateStatus();
             UpdateEmptyState();
+            UpdateFilterColors();
         }
 
         private void btnClearFilter_Click(object sender, RoutedEventArgs e)
@@ -216,6 +232,7 @@ namespace WPFApp
             chkInStockOnly.IsChecked = false;
             cboFilterCategory.SelectedValue = null;
             txtSearch.Text = "";
+            UpdateFilterColors();
         }
 
         private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
@@ -224,6 +241,82 @@ namespace WPFApp
             searchPlaceholder.Visibility = string.IsNullOrEmpty(txtSearch.Text) ? Visibility.Visible : Visibility.Collapsed;
             UpdateStatus();
             UpdateEmptyState();
+            UpdateFilterColors();
+        }
+
+        private void UpdateFilterColors()
+        {
+            // If there are no products at all, don't color filters
+            if (vm.TotalCount == 0)
+            {
+                txtSearch.Background = searchDefaultBg;
+                cboFilterCategory.Background = comboDefaultBg;
+                chkInStockOnly.Background = checkDefaultBg;
+                return;
+            }
+
+            // Search filter: if non-empty and no product name matches -> yellow
+            bool searchMatches = true;
+            var txt = txtSearch.Text?.Trim();
+            if (!string.IsNullOrEmpty(txt))
+            {
+                searchMatches = vm.Products.Any(p => (p.ProductName ?? "").IndexOf(txt, StringComparison.OrdinalIgnoreCase) >= 0);
+            }
+            txtSearch.Background = searchMatches ? searchDefaultBg : Brushes.LightYellow;
+
+            // Category filter: if selected and no products in that category -> yellow
+            bool categoryMatches = true;
+            if (cboFilterCategory.SelectedValue is int cid)
+            {
+                categoryMatches = vm.Products.Any(p => p.CategoryId == cid);
+            }
+            cboFilterCategory.Background = categoryMatches ? comboDefaultBg : Brushes.LightYellow;
+
+            // In-stock filter: if checked and no products have stock > 0 -> yellow
+            bool inStockMatches = true;
+            if (chkInStockOnly.IsChecked == true)
+            {
+                inStockMatches = vm.Products.Any(p => p.UnitsInStock > 0);
+            }
+            chkInStockOnly.Background = inStockMatches ? checkDefaultBg : Brushes.LightYellow;
+        }
+
+        private void btnTopCategory_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var top = iCategoryService.GetCategoryWithMostProducts();
+                if (top == null)
+                {
+                    AppDialog.Info("No categories found.", owner: this);
+                    return;
+                }
+                AppDialog.Info(
+                    $"{top.CategoryName} — {top.Products.Count} product(s)",
+                    title: "Category with most products",
+                    owner: this);
+            }
+            catch (Exception ex) { AppDialog.Error(ex.Message, owner: this); }
+        }
+
+        private void btnTop3Categories_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var top3 = iCategoryService.GetTopCategoriesByProductCount(3);
+                if (top3.Count == 0)
+                {
+                    AppDialog.Info("No categories found.", owner: this);
+                    return;
+                }
+                var lines = top3.Select((c, i) =>
+                    $"{i + 1}. {c.CategoryName,-20} {c.Products.Count} product(s)");
+                AppDialog.Info(
+                    string.Join("\n", lines),
+                    title: "Top 3 categories",
+                    owner: this);
+            }
+            catch (Exception ex) { AppDialog.Error(ex.Message, owner: this); }
         }
 
         private void ResetInput()

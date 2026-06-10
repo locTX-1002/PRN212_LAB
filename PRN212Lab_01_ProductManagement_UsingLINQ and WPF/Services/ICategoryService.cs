@@ -8,5 +8,7 @@ namespace Services
     public interface ICategoryService
     {
         public List<Category> GetCategories();
+        public Category? GetCategoryWithMostProducts();
+        public List<Category> GetTopCategoriesByProductCount(int top);
     }
 }

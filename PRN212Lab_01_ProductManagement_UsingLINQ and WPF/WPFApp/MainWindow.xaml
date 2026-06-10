@@ -118,9 +118,64 @@
 
                     <TextBlock Text="CATEGORY" Style="{StaticResource HeaderLabel}" Margin="6,16,0,8"/>
                     <ComboBox x:Name="cboFilterCategory" SelectionChanged="cboFilterCategory_SelectionChanged"
-                              DisplayMemberPath="CategoryName" SelectedValuePath="CategoryID" Margin="0,0,0,4"/>
+                              SelectedValuePath="CategoryID" Margin="0,0,0,4">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="4,2" CornerRadius="3">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Products.Count}" Value="0">
+                                                    <Setter Property="Background" Value="#FACC15"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding CategoryName}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Products.Count}" Value="0">
+                                                            <Setter Property="Foreground" Value="#1F2937"/>
+                                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <TextBlock Text="{Binding Products.Count, StringFormat=' ({0})'}"
+                                                   Margin="4,0,0,0" FontSize="11">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="{StaticResource TextTertiary}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Products.Count}" Value="0">
+                                                            <Setter Property="Foreground" Value="#92400E"/>
+                                                            <Setter Property="FontWeight" Value="Bold"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                     <Button Style="{StaticResource GhostButton}" Click="btnClearFilter_Click" HorizontalAlignment="Left">
                         <TextBlock Text="Clear filters" Style="{StaticResource Mono}" FontSize="11"/>
+                    </Button>
+
+                    <Rectangle Height="1" Fill="{StaticResource BorderMuted}" Margin="0,12"/>
+
+                    <TextBlock Text="STATISTICS" Style="{StaticResource HeaderLabel}" Margin="6,0,0,8"/>
+                    <Button Style="{StaticResource GhostButton}" Click="btnTopCategory_Click" HorizontalAlignment="Left" Margin="0,2">
+                        <TextBlock Text="↑ Top category" Style="{StaticResource Mono}" FontSize="11"/>
+                    </Button>
+                    <Button Style="{StaticResource GhostButton}" Click="btnTop3Categories_Click" HorizontalAlignment="Left" Margin="0,2">
+                        <TextBlock Text="≡ Top 3 categories" Style="{StaticResource Mono}" FontSize="11"/>
                     </Button>
                 </StackPanel>
             </Border>
