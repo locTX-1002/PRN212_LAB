@@ -60,6 +60,11 @@ PublishScripts/
 # Misc
 *.tmp
 *.bak
+*.rar
+*.zip
+*.7z
+*.docx
+*.pdf
 Thumbs.db
 .DS_Store
 *.log
